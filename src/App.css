@@ -366,3 +366,76 @@ td.fee{color:var(--orange-2);font-weight:600;white-space:nowrap}
   .reveal{opacity:1;translate:none}
   .marquee-track{animation:none}
 }
+
+/* ---------- All-four-courses offer ---------- */
+.bundle-wrap{margin-top:20px}
+.course-list .bundle-wrap{margin-top:48px}
+.bundle{display:grid;grid-template-columns:1.4fr auto;gap:40px;align-items:center;padding:40px 44px;border-radius:32px;border-color:rgba(255,90,0,.35);background:radial-gradient(600px circle at 100% 0%,rgba(255,90,0,.28),transparent 60%),var(--glass);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 40px 80px -40px rgba(255,90,0,.55)}
+.bundle-pill{margin-bottom:18px}
+.bundle h3{font-size:clamp(26px,3vw,40px);letter-spacing:-.035em;margin-bottom:22px}
+.nowrap{white-space:nowrap}
+.bundle-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}
+.bundle-list li{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;color:rgba(255,255,255,.88)}
+.tick{flex-shrink:0;display:grid;place-items:center;width:20px;height:20px;margin-top:1px;border-radius:50%;background:var(--orange);color:#000;font-size:11px;font-weight:800}
+.bundle-price{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:4px}
+.bundle-was{font-size:18px;color:var(--faint);text-decoration:line-through;text-decoration-color:var(--orange)}
+.bundle-price strong{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',Manrope,sans-serif;font-size:clamp(44px,5vw,64px);font-weight:800;letter-spacing:-.045em;line-height:1;color:var(--white)}
+.bundle-save{margin:8px 0 18px;padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:700;color:#000;background:linear-gradient(180deg,#FF8A3D,var(--orange))}
+@media(max-width:900px){
+  .bundle{grid-template-columns:1fr;gap:28px;padding:32px 26px;border-radius:28px}
+  .bundle-price{align-items:flex-start;text-align:left}
+  .bundle-list{grid-template-columns:1fr}
+}
+
+/* Header enquiry button + founder tag alignment */
+button.header-cta{border:0;cursor:pointer}
+.founder-top .pill{margin-left:auto}
+@media(max-width:900px){
+  .nav-inner .nav-cta{opacity:0;transform:translate3d(0,-10px,0);transition:opacity .35s,transform .5s var(--ease);align-self:flex-start}
+  .menu-open .nav-inner .nav-cta{opacity:1;transform:none;transition-delay:260ms}
+}
+
+/* ---------- Enquiry popup ---------- */
+.modal{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:20px;pointer-events:none;visibility:hidden;transition:visibility 0s .45s}
+.modal.open{pointer-events:auto;visibility:visible;transition-delay:0s}
+.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;transition:opacity .4s var(--ease)}
+.modal.open .modal-backdrop{opacity:1}
+.modal-sheet{position:relative;width:min(620px,100%);max-height:calc(100dvh - 40px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:40px;border-radius:32px;background:rgba(18,18,20,.82);border-color:var(--line-2);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 40px 120px -20px rgba(0,0,0,.9),0 0 0 1px rgba(255,90,0,.08);opacity:0;transform:translate3d(0,24px,0) scale(.96);transition:opacity .35s var(--ease),transform .55s var(--spring)}
+.modal.open .modal-sheet{opacity:1;transform:none}
+.modal-sheet::before{content:'';position:absolute;top:-120px;right:-120px;width:320px;height:320px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,90,0,.25),rgba(255,90,0,0));pointer-events:none}
+.modal-sheet h2{font-size:clamp(26px,3.2vw,34px);margin-bottom:10px;position:relative}
+.modal-lead{color:var(--muted);font-size:14.5px;margin-bottom:26px}
+.modal-sheet .eyebrow{margin-bottom:14px}
+.modal-close{position:absolute;top:18px;right:18px;z-index:1;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.08);transition:background .25s,transform .4s var(--spring)}
+.modal-close:hover{background:rgba(255,255,255,.16);transform:rotate(90deg)}
+.modal-close span{position:absolute;left:11px;top:17px;width:14px;height:2px;border-radius:2px;background:var(--white);transform:rotate(45deg)}
+.modal-close span+span{transform:rotate(-45deg)}
+
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field-full{grid-column:1/-1;margin-bottom:8px}
+.field label{font-size:12.5px;font-weight:600;color:var(--text)}
+.optional{font-weight:400;color:var(--faint)}
+.field input,.field select{width:100%;height:50px;padding:0 16px;border-radius:14px;border:1px solid var(--line-2);background:rgba(255,255,255,.05);color:var(--white);font:inherit;font-size:15px;outline:none;transition:border-color .25s,background .25s,box-shadow .25s;-webkit-appearance:none;appearance:none}
+.field select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 22px) 22px,calc(100% - 17px) 22px;background-size:5px 5px;background-repeat:no-repeat;padding-right:40px;cursor:pointer}
+.field select option{background:#151517;color:var(--white)}
+.field input::placeholder{color:#5c5c61}
+.field input:hover,.field select:hover{border-color:rgba(255,255,255,.26)}
+.field input:focus,.field select:focus{border-color:var(--orange);background:rgba(255,90,0,.06);box-shadow:0 0 0 4px rgba(255,90,0,.15)}
+.has-error input{border-color:#ff4d4d;background:rgba(255,77,77,.06)}
+.has-error input:focus{box-shadow:0 0 0 4px rgba(255,77,77,.15)}
+.field-error{min-height:18px;margin:0 0 6px;font-size:12px;color:#ff6b6b}
+.form-error{color:#ff6b6b;font-size:13px;margin:0 0 12px}
+.submit{width:100%;margin-top:6px}
+.submit:disabled{opacity:.7;cursor:progress}
+
+.enquiry-done{text-align:center;padding:20px 0 6px}
+.done-check{display:grid;place-items:center;width:72px;height:72px;margin:0 auto 22px;border-radius:50%;background:linear-gradient(180deg,#FF8A3D,var(--orange));color:#000;font-size:32px;font-weight:800;box-shadow:0 16px 40px -10px rgba(255,90,0,.7);animation:pop .6s var(--spring) both}
+@keyframes pop{from{transform:scale(.4);opacity:0}}
+.enquiry-done p{color:var(--muted);margin-bottom:26px}
+
+@media(max-width:640px){
+  .modal{place-items:end center;padding:0}
+  .modal-sheet{width:100%;max-height:92dvh;padding:30px 22px calc(24px + env(safe-area-inset-bottom));border-radius:28px 28px 0 0;transform:translate3d(0,100%,0);transition:opacity .3s,transform .55s var(--ease)}
+  .field-grid{grid-template-columns:1fr}
+}

@@ -4,6 +4,12 @@ export const routes = ['/', '/courses', '/about', '/services']
 export const labels = ['Home', 'Courses', 'About Us', 'Services']
 export const levels = ['BEGINNER', 'INTERMEDIATE', 'GLOBAL MARKETS', 'LONG-TERM INVESTING']
 
+// Course fees in rupees, in program order. Edit here to change prices across the site.
+const fees = [6999, 6999, 10999, 5999]
+export const bundlePrice = 21999
+export const inr = n => '₹' + n.toLocaleString('en-IN')
+export const fullPrice = fees.reduce((a, b) => a + b, 0)
+
 export const programs = syllabus
   .split(/\r?\n(?=\d\. )/)
   .slice(1)
@@ -14,7 +20,7 @@ export const programs = syllabus
     return {
       id: i + 1,
       title: lines[0].replace(/^\d\. /, ''),
-      fee: lines[1].replace('Fee:', '').trim(),
+      fee: fees[i],
       audience: lines[2].replace('Target Audience:', '').trim(),
       description: lines[3],
       topics: lines.slice(4),

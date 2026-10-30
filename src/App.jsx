@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   routes, labels, levels, programs, shortAudience, coreFocus,
-  officeImages, founders, values, services, marketTags,
+  officeImages, founders, values, services, marketTags, bundlePrice, fullPrice, inr,
 } from './data'
 import { useReveal, useScrollState, usePointerFx } from './motion'
+import Enquiry from './Enquiry'
 import './App.css'
 
 const Link = ({ to, children, ...props }) => <a href={`#${to}`} {...props}>{children}</a>
@@ -144,7 +145,7 @@ function Card({ p, i }) {
         <h3>{p.title}</h3>
         <p>{p.description}</p>
         <div className="card-bottom">
-          <strong>{p.id === 4 ? 'Included in path' : p.fee.replace('/-', '')}</strong>
+          <strong>{inr(p.fee)}</strong>
           <Link className="card-link" to={`/courses?course=${p.id}`}>View syllabus <Arrow /></Link>
         </div>
       </article>
@@ -180,6 +181,7 @@ function Home() {
           text="Choose a program that meets you where you are, and takes your market understanding further."
         />
         <div className="course-grid">{programs.map((p, i) => <Card p={p} i={i} key={p.id} />)}</div>
+        <Bundle cta />
       </section>
       <section className="philosophy wrap">
         <div className="philosophy-card glass">
@@ -195,6 +197,30 @@ function Home() {
       </section>
       <OfficeInsights />
     </>
+  )
+}
+
+/* ---------- All-four-courses offer ---------- */
+
+function Bundle({ cta }) {
+  return (
+    <div className="bundle-wrap reveal">
+      <div className="bundle glass glow">
+        <div className="bundle-copy">
+          <span className="pill bundle-pill">SPECIAL OFFER · ALL 4 COURSES</span>
+          <h3>Get all four courses <span className="nowrap">@ <em>{inr(bundlePrice)}</em></span></h3>
+          <ul className="bundle-list">
+            {programs.map(p => <li key={p.id}><span className="tick" aria-hidden="true">✓</span>{p.title}</li>)}
+          </ul>
+        </div>
+        <div className="bundle-price">
+          <span className="bundle-was">{inr(fullPrice)}</span>
+          <strong>{inr(bundlePrice)}</strong>
+          <span className="bundle-save">You save {inr(fullPrice - bundlePrice)}</span>
+          {cta && <Link className="button" to="/courses">View all courses <Arrow /></Link>}
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -237,8 +263,7 @@ function Courses({ selected }) {
             <div>
               <span className="pill">0{p.id} / {levels[p.id - 1]}</span>
               <h2>{p.title}</h2>
-              <strong className="price">{p.fee}</strong>
-              {p.id === 4 && <p className="small">Included in Comprehensive Path. Contact the institute to confirm standalone availability and fee.</p>}
+              <strong className="price">{inr(p.fee)}</strong>
               <p>{p.description}</p>
               <div className="audience">
                 <span className="eyebrow">WHO IT'S FOR</span>
@@ -246,10 +271,11 @@ function Courses({ selected }) {
               </div>
             </div>
             <div>
-              <Curriculum key={`${selected}-${p.id}`} topics={p.topics} initiallyOpen={selected === p.id || selected === null} />
+              <Curriculum key={`${selected}-${p.id}`} topics={p.topics} initiallyOpen={selected === p.id} />
             </div>
           </article>
         ))}
+        <Bundle />
       </section>
       <section className="section wrap">
         <SectionHeading label="AT A GLANCE" title="Compare your learning paths." />
@@ -261,7 +287,7 @@ function Courses({ selected }) {
               {programs.map((p, i) => (
                 <tr key={p.id}>
                   <th scope="row">{p.title}</th>
-                  <td className="fee">{p.id === 4 ? 'Included in Comprehensive Path' : p.fee.replace('/-', '')}</td>
+                  <td className="fee">{inr(p.fee)}</td>
                   <td>{shortAudience[i]}</td>
                   <td>{coreFocus[i]}</td>
                 </tr>
@@ -294,14 +320,12 @@ function Founders() {
                 <div className="founder-photo">
                   <img src={f.photo} alt={`${f.name}, ${f.role} of Black Bar`} loading="lazy" decoding="async" />
                   <div className="founder-top">
-                    <span className="number frost">0{i + 1}</span>
                     <span className="pill frost">{f.role.toUpperCase()}</span>
                   </div>
                 </div>
               ) : (
                 <>
                   <div className="founder-top">
-                    <span className="number">0{i + 1}</span>
                     <span className="pill">{f.role.toUpperCase()}</span>
                   </div>
                   <div className="avatar">
@@ -385,7 +409,7 @@ function Services() {
 
 /* ---------- Shell ---------- */
 
-function Header({ path, scrolled }) {
+function Header({ path, scrolled, onEnquire }) {
   const [menu, setMenu] = useState(false)
   useEffect(() => {
     if (!menu) return
@@ -405,10 +429,10 @@ function Header({ path, scrolled }) {
             {routes.map((to, i) => (
               <Link key={to} to={to} aria-current={path === to ? 'page' : undefined} style={{ '--i': i }}>{labels[i]}</Link>
             ))}
-            <Link to="/courses" className="button nav-cta">Find your course <Arrow /></Link>
+            <button type="button" className="button nav-cta" onClick={() => { setMenu(false); onEnquire() }}>Enquiry <Arrow /></button>
           </div>
         </nav>
-        <Link to="/courses" className="header-cta">Find your course <Arrow /></Link>
+        <button type="button" className="header-cta" onClick={onEnquire} aria-haspopup="dialog">Enquiry <Arrow /></button>
         <button className="menu-toggle" aria-controls="navigation" aria-expanded={menu} aria-label={menu ? 'Close menu' : 'Open menu'} onClick={() => setMenu(!menu)}>
           <span /><span />
         </button>
@@ -444,6 +468,9 @@ function App() {
   const [path, query] = route.split('?')
   const selected = Number(new URLSearchParams(query).get('course')) || null
   const barRef = useRef(null)
+  const [enquiry, setEnquiry] = useState(false)
+  const openEnquiry = useCallback(() => setEnquiry(true), [])
+  const closeEnquiry = useCallback(() => setEnquiry(false), [])
   const scrolled = useScrollState(barRef)
   useReveal(route)
   usePointerFx()
@@ -471,7 +498,7 @@ function App() {
       <div className="progress" ref={barRef} aria-hidden="true" />
       <div className="ambient" aria-hidden="true"><i className="orb orb-1" /><i className="orb orb-2" /><i className="orb orb-3" /></div>
       <a href="#main-content" className="skip-link" onClick={e => { e.preventDefault(); document.getElementById('main-content')?.focus() }}>Skip to content</a>
-      <Header path={path} scrolled={scrolled} />
+      <Header path={path} scrolled={scrolled} onEnquire={openEnquiry} />
       <main id="main-content" tabIndex={-1} key={path} className="page">
         {page}
         <section className="closing wrap">
@@ -485,6 +512,7 @@ function App() {
         </section>
       </main>
       <Footer />
+      <Enquiry open={enquiry} onClose={closeEnquiry} />
     </>
   )
 }
